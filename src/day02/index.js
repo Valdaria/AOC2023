@@ -7,9 +7,7 @@ const part1 = (rawInput) => {
   const res = input
     .map((line) => {
       const id = line.slice(5, line.indexOf(":"));
-      // console.log(`Game ${id}`)
       const colors = {
-        id: parseInt(id),
         red: 0,
         green: 0,
         blue: 0
@@ -19,7 +17,6 @@ const part1 = (rawInput) => {
       let isPossible = true
       
       bags.map((content) => {
-        // console.log(content)
         const cols = content.split(",")
         cols.forEach((color) => {
           const spl = color.trim().split(" ")
@@ -43,7 +40,33 @@ const part2 = (rawInput) => {
    * @type String[]
    */
   const input = parseInput(rawInput);
-  return;
+  const res = input
+    .map((line) => {
+      const colors = {
+        red: 0,
+        green: 0,
+        blue: 0
+      }
+
+      const bags = line.split(":")[1].split(";")
+      
+      bags.map((content) => {
+        const cols = content.split(",")
+        cols.forEach((color) => {
+          const spl = color.trim().split(" ")
+          colors[spl[1]] = Math.max(parseInt(spl[0]), colors[spl[1]])
+        }) 
+      })
+      return colors
+    })
+    .map(val => {
+      return val.red * val.green * val.blue
+    })
+    .reduce((acc, val) => {
+      return acc+val;
+    }, 0)
+
+return res;
 };
 
 run({
@@ -72,11 +95,11 @@ Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 `,
-        expected: "2286",
+        expected: 2286,
       },
     ],
     solution: part2,
   },
   trimTestInputs: true,
-  onlyTests: true,
+  onlyTests: false,
 });
